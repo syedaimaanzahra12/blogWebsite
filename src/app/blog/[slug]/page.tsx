@@ -2,14 +2,13 @@ import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import { BlogType } from "@/app/components/blog";
 
-interface Params {
-  params: {
-    slug: string;
-  };
+interface BlogPostParams {
+  params: Promise<{ slug: string }>
+  
 }
 
-const BlogPost = async (params: Params) => {
-  const { slug } = params.params;
+const BlogPost = async ({params}: BlogPostParams) => {
+const { slug } = await params;  
   const data: BlogType = await client.fetch(
     `
     *[_type == "blog" && slug.current == $slug]{
